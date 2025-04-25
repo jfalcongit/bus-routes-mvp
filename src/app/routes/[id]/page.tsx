@@ -40,7 +40,7 @@ export default function RouteDetail({ params }: Props) {
           <dl className="grid grid-cols-2 gap-4 text-brand-night">
             <div>
               <dt className="font-semibold text-brand-purple">Tarifa</dt>
-              <dd>${route.fare.toFixed(2)}</dd>
+              <dd>{route.fare.toFixed(2)} Bs</dd>
             </div>
             <div>
               <dt className="font-semibold text-brand-purple">Capacidad</dt>

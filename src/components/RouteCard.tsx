@@ -19,21 +19,28 @@ export default function RouteCard({
 }: Props) {
   return (
     <Link
+      className="flex flex-col items-center gap-4 rounded-lg border-l-4 border-brand-purple bg-white p-4 text-brand-night shadow hover:shadow-md"
       href={`/routes/${id}`}
-      className="flex items-center gap-4 rounded-lg border-l-4 border-brand-purple bg-white p-4 text-brand-night shadow hover:shadow-md"
     >
-      <StaticMapThumb {...thumb} />
-      <div className="flex flex-col flex-1">
+      <div className="flex w-full items-center justify-between gap-4">
+        <StaticMapThumb {...thumb} />
+        <div className="hidden md:flex flex-col flex-1">
+          <h3 className="text-lg font-semibold">
+            {origin} <span className="text-brand-purple">→</span> {destination}
+          </h3>
+        </div>
+        <Badge
+          className="bg-brand-yellow text-brand-night py-1 px-2 text-sm"
+          variant="primary"
+        >
+          {fare.toFixed(2)} Bs
+        </Badge>
+      </div>
+      <div className="flex md:hidden flex-col flex-1">
         <h3 className="text-lg font-semibold">
           {origin} <span className="text-brand-purple">→</span> {destination}
         </h3>
       </div>
-      <Badge
-        className="bg-brand-yellow text-brand-night py-1 px-2 text-sm"
-        variant="primary"
-      >
-        ${fare.toFixed(2)}
-      </Badge>
     </Link>
   );
 }

@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata = {
-  title: "Rutas de Autobús",
-  description: "MVP para la búsqueda de rutas de autobús",
+  title: "Rutas de Autobuses",
+  description: "MVP para Rutas de Autobuses",
   icons: {
     shortcut:
       "https://cdn.prod.website-files.com/60f18a63987c88051d8d07be/6579cf71b0bf940e88a96128_ICO-32X32.jpg",
@@ -32,7 +32,7 @@ export default function RootLayout({
             </Link>
             <div className="flex gap-4 text-sm font-medium">
               <Link href="/" className="hover:text-brand-purple-dark">
-                Home
+                Inicio
               </Link>
               <Link href="/routes" className="hover:text-brand-purple-dark">
                 Rutas
