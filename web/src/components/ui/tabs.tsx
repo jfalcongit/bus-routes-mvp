@@ -5,10 +5,34 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * Componente Tabs (Pestañas)
+ *
+ * Implementación accesible de un sistema de pestañas usando Radix UI.
+ * Este es el componente raíz que contiene toda la funcionalidad de pestañas.
+ *
+ * @example
+ * ```tsx
+ * <Tabs defaultValue="tab1">
+ *   <TabsList>
+ *     <TabsTrigger value="tab1">Pestaña 1</TabsTrigger>
+ *     <TabsTrigger value="tab2">Pestaña 2</TabsTrigger>
+ *   </TabsList>
+ *   <TabsContent value="tab1">Contenido de la pestaña 1</TabsContent>
+ *   <TabsContent value="tab2">Contenido de la pestaña 2</TabsContent>
+ * </Tabs>
+ * ```
+ */
 const Tabs = TabsPrimitive.Root;
 
+/**
+ * Componente TabsList
+ *
+ * Contenedor para los botones de pestañas (TabsTrigger).
+ * Proporciona los estilos y la estructura para la lista de pestañas.
+ */
 const TabsList = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.List>,
+  React.ComponentRef<typeof TabsPrimitive.List>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.List
@@ -22,6 +46,13 @@ const TabsList = React.forwardRef<
 ));
 TabsList.displayName = TabsPrimitive.List.displayName;
 
+/**
+ * Componente TabsTrigger
+ *
+ * Botón que activa una pestaña específica.
+ * Muestra un estilo diferente cuando está activo para indicar la pestaña seleccionada.
+ * Debe tener un valor que corresponda con el TabsContent relacionado.
+ */
 const TabsTrigger = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
@@ -37,6 +68,13 @@ const TabsTrigger = React.forwardRef<
 ));
 TabsTrigger.displayName = TabsPrimitive.Trigger.displayName;
 
+/**
+ * Componente TabsContent
+ *
+ * Contenedor para el contenido de una pestaña específica.
+ * Se muestra cuando la pestaña correspondiente está activa.
+ * Debe tener un valor que corresponda con el TabsTrigger relacionado.
+ */
 const TabsContent = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>

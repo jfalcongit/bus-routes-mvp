@@ -1,98 +1,117 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# API de Rutas de Autobuses
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este proyecto es la **API** del monorepo Bus Routes MVP, construida con Nest.js, GraphQL y Prisma, diseñada para gestionar rutas de autobuses incluyendo paradas y viajes.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Características principales
 
-## Description
+- **CRUD completo** para:
+  - Rutas (`Route`)
+  - Paradas (`Stop`)
+  - Viajes/Salidas (`Trip`)
+- **Relaciones anidadas**: cada ruta incluye orden de paradas y viajes.
+- **Paginación**, **filtrado** (origén y destino, caso insensible) y **ordenamiento**.
+- **Validación de datos** con `class-validator` y `ValidationPipe`.
+- **Prisma** como ORM para PostgreSQL.
+- **Health Check** en `/health`.
+- **Playground GraphQL** (solo en desarrollo).
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Estructura del proyecto
 
-## Project setup
-
-```bash
-$ npm install
+```
+api/
+├── prisma/                 # Esquema, migraciones y cliente Prisma
+│   ├── migrations/         # Migraciones generadas
+│   └── schema.prisma       # Modelo de datos
+├── src/
+│   ├── routes/             # Módulo GraphQL de rutas
+│   │   ├── dto/            # DTOs de entrada (GraphQL Inputs)
+│   │   ├── models/         # Definiciones de tipos GraphQL (ObjectTypes)
+│   │   ├── routes.module.ts
+│   │   ├── routes.service.ts
+│   │   └── routes.resolver.ts
+│   ├── prisma/             # Módulo e inyección de servicio Prisma
+│   ├── health.controller.ts# Endpoint `/health`
+│   ├── app.module.ts       # Módulo raíz
+│   └── main.ts             # Punto de entrada y configuración global
+├── test/                   # Pruebas E2E con Jest + Supertest
+├── .env                    # Variables de entorno (no versionar)
+├── nest-cli.json           # Configuración CLI Nest
+├── package.json            # Dependencias y scripts
+└── tsconfig.json           # Configuración TypeScript
 ```
 
-## Compile and run the project
+## Instalación y configuración local
 
-```bash
-# development
-$ npm run start
+1. **Clona** este repositorio y navega a la carpeta `api/`:
 
-# watch mode
-$ npm run start:dev
+   ```bash
+   git clone <repo-url>
+   cd bus-routes-mvp/api
+   ```
 
-# production mode
-$ npm run start:prod
-```
+2. **Instala** las dependencias:
 
-## Run tests
+   ```bash
+   npm install
+   ```
 
-```bash
-# unit tests
-$ npm run test
+3. **Crea** un archivo `.env` en `api/` con la siguiente plantilla:
 
-# e2e tests
-$ npm run test:e2e
+   ```ini
+   DATABASE_URL=postgresql://USUARIO:CONTRASEÑA@HOST:PUERTO/NOMBRE_DB?sslmode=require
+   # (Opcional) SENTRY_DSN=<tu-dsn-de-sentry>
+   ```
 
-# test coverage
-$ npm run test:cov
-```
+4. **Ejecuta** migraciones y arranca en modo desarrollo:
 
-## Deployment
+   ```bash
+   npx prisma migrate dev
+   npm run start:dev
+   ```
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+5. **Accede**:
+   - Playground GraphQL: `http://localhost:3000/graphql`
+   - Health Check: `http://localhost:3000/health`
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## Scripts disponibles
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+En `package.json` están definidos los siguientes comandos:
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+| Comando              | Descripción                                    |
+| -------------------- | ---------------------------------------------- |
+| `npm run start:dev`  | Inicia Nest.js en modo desarrollo (Hot Reload) |
+| `npm run start:prod` | Compila y ejecuta en modo producción           |
+| `npm run build`      | Compila TypeScript a JavaScript (en `dist/`)   |
+| `npm run lint`       | Ejecuta ESLint                                 |
+| `npm test`           | Ejecuta pruebas unitarias (Jest)               |
+| `npm run test:e2e`   | Ejecuta pruebas E2E (Jest + Supertest)         |
 
-## Resources
+## Pruebas E2E
 
-Check out a few resources that may come in handy when working with NestJS:
+1. Configura tu BD de prueba (puede ser SQLite o un Postgres distinto).
+2. Ejecuta:
+   ```bash
+   npm run test:e2e
+   ```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Las pruebas cubren los flujos CRUD + filtrado + paginación.
 
-## Support
+## Despliegue en producción
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+En DigitalOcean App Platform o similar:
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+1. **Variables de entorno**:
+   - `DATABASE_URL` (cadena de conexión a Postgres).
+   - `GRAPHQL_API_URL` (opcional, si el frontend lo consume).
+2. **Build Command**:
+   ```bash
+   npm ci
+   npx prisma generate
+   npm run build
+   ```
+3. **Run Command**:
+   ```bash
+   npx prisma migrate deploy
+   npm run start:prod
+   ```
+4. **Health Check**: configura el endpoint `/health` en la plataforma.

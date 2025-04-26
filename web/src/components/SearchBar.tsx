@@ -4,14 +4,28 @@ import { Button } from "@/components/ui/button";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect, useState } from "react";
 
+/**
+ * Props del componente SearchBar
+ * @interface Props
+ * @property {string} filter - Término de búsqueda actual
+ * @property {function} onFilter - Función callback que se ejecuta cuando cambia el filtro
+ */
 interface Props {
   filter: string;
   onFilter: (term: string) => void;
 }
 
+/**
+ * Componente de barra de búsqueda con debounce
+ *
+ * Permite al usuario filtrar contenido mientras escribe y muestra
+ * un botón para limpiar la búsqueda cuando hay texto.
+ */
 export default function SearchBar({ filter, onFilter }: Props) {
+  // Estado local para manejar el valor del input
   const [term, setTerm] = useState(filter);
 
+  // Función de filtrado con debounce para evitar múltiples llamadas
   const debouncedFilter = useCallback(
     debounce((value: string) => {
       onFilter(value.trim());
@@ -19,6 +33,7 @@ export default function SearchBar({ filter, onFilter }: Props) {
     [onFilter]
   );
 
+  // Aplica el filtro cuando cambia el término de búsqueda
   useEffect(() => {
     debouncedFilter(term);
     return () => {
@@ -26,6 +41,7 @@ export default function SearchBar({ filter, onFilter }: Props) {
     };
   }, [term, debouncedFilter]);
 
+  // Sincroniza el estado local con el prop filter
   useEffect(() => {
     setTerm(filter);
   }, [filter]);
