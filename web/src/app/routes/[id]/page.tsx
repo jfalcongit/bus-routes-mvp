@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 import { makeApolloClient } from "@/lib/apolloClient";
 import { Route as RouteType } from "@/types/routes";

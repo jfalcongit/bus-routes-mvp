@@ -1,3 +1,5 @@
+export const revalidate = 60;
+
 import { makeApolloClient } from "@/lib/apolloClient";
 import { gql } from "@apollo/client";
 import RoutesClient from "./RoutesClient";
