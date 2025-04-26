@@ -1,3 +1,4 @@
+// src/app/routes/RoutesClient.tsx
 "use client";
 
 import RouteCard from "@/components/RouteCard";
@@ -14,11 +15,14 @@ export default function RoutesClient({ initialRoutes }: RoutesClientProps) {
 
   const routes = useMemo(() => {
     if (!filter) return initialRoutes;
-    return initialRoutes.filter((r) =>
-      r.stops.some((stop) =>
-        stop.name.toLowerCase().includes(filter.toLowerCase())
-      )
-    );
+    return initialRoutes.filter((r) => {
+      const origin = r.stops[0]?.name.toLowerCase();
+      const destination = r.stops[r.stops.length - 1]?.name.toLowerCase();
+      return (
+        origin.includes(filter.toLowerCase()) ||
+        destination.includes(filter.toLowerCase())
+      );
+    });
   }, [filter, initialRoutes]);
 
   return (
@@ -27,7 +31,7 @@ export default function RoutesClient({ initialRoutes }: RoutesClientProps) {
         Rutas disponibles
       </h1>
 
-      <SearchBar onFilter={setFilter} />
+      <SearchBar filter={filter} onFilter={setFilter} />
 
       <section className="space-y-4">
         {routes.length > 0 ? (
