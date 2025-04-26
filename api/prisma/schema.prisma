@@ -1,0 +1,59 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+datasource test {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Stop {
+  id         Int         @id @default(autoincrement())
+  name       String      @unique
+  latitude   Float
+  longitude  Float
+
+  originRoutes      Route[]   @relation("Origin")
+  destinationRoutes Route[]   @relation("Destination")
+
+  routeStops RouteStop[]
+}
+
+model Route {
+  id                  String     @id
+  originStopId        Int
+  destinationStopId   Int
+  fare                Int
+  capacity            Int
+
+  originStop        Stop       @relation("Origin", fields: [originStopId], references: [id])
+  destinationStop   Stop       @relation("Destination", fields: [destinationStopId], references: [id])
+
+  routeStops        RouteStop[]
+  trips             Trip[]
+}
+
+model RouteStop {
+  routeId   String
+  stopOrder Int
+  stopId    Int
+
+  route     Route   @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  stop      Stop    @relation(fields: [stopId], references: [id])
+
+  @@id([routeId, stopOrder])
+}
+
+model Trip {
+  id            Int      @id @default(autoincrement())
+  routeId       String
+  departureTime DateTime
+  arrivalTime   DateTime
+
+  route         Route    @relation(fields: [routeId], references: [id], onDelete: Cascade)
+}
