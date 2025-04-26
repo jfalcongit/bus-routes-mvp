@@ -1,3 +1,4 @@
+import heroImage from "@/assets/images/hero.png";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,10 +8,10 @@ export default function Home() {
     <main className="flex flex-col flex-grow items-center justify-center gap-6 p-8 text-center">
       <div className="relative w-full max-w-5xl overflow-hidden rounded-lg shadow-md">
         <Image
-          src="/images/hero.png"
-          alt="Bus routes hero"
-          width={1200}
-          height={400}
+          src={heroImage}
+          alt="Banner de Rutas de Autobuses"
+          placeholder="blur"
+          sizes="(max-width: 768px) 100vw, 1200px"
           className="h-auto w-full object-cover"
           priority
         />
