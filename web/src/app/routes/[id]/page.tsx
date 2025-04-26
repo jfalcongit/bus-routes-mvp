@@ -5,16 +5,14 @@ import { notFound } from "next/navigation";
 import RouteDetailClient from "./RouteDetailClient";
 
 interface PageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function RouteDetailPage({ params }: PageProps) {
-  const { id } = params;
+  const { id } = await params;
   const client = makeApolloClient();
 
-  const { data, error } = await client.query<{
-    route: RouteType | null;
-  }>({
+  const { data, error } = await client.query<{ route: RouteType | null }>({
     query: gql`
       query GetRoute($id: String!) {
         route(id: $id) {
