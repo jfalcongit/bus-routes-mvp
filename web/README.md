@@ -44,7 +44,7 @@ web/
 En `web/.env.local` define:
 
 ```ini
-NEXT_PUBLIC_API_URL=https://<tu-dominio-api>/graphql
+GRAPHQL_URL=https://<tu-dominio-api>/graphql
 NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=<tu-google-maps-key>
 ```
 
