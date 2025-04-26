@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { makeApolloClient } from "@/lib/apolloClient";
 import { Route as RouteType } from "@/types/routes";
 import { gql } from "@apollo/client";
@@ -10,6 +12,7 @@ interface PageProps {
 
 export default async function RouteDetailPage({ params }: PageProps) {
   const { id } = await params;
+
   const client = makeApolloClient();
 
   const { data, error } = await client.query<{ route: RouteType | null }>({
@@ -38,5 +41,5 @@ export default async function RouteDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  return <RouteDetailClient route={data.route!} />;
+  return <RouteDetailClient route={data.route} />;
 }
