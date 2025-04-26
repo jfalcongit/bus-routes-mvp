@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Aplicación Web de Rutas de Autobuses
 
-## Getting Started
+Este proyecto es la **aplicación cliente** del monorepo Bus Routes MVP, construida con Next.js (App Router) y React, que consume la API GraphQL para mostrar rutas de autobús.
 
-First, run the development server:
+## Características principales
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Listado de rutas con **búsqueda en tiempo real** (fuzzy y sin acentos)
+- Página de detalle de ruta con ficha de datos y **mapa interactivo** (Google Maps JS API)
+- **Optimización** SSR y SSG con Next.js
+- **Componentes** separados entre servidor y cliente para mejor performance
+- **Skeletons de carga** y optimizaciones de imágenes (Next/Image)
+- **Debounce** y **trim** en la barra de búsqueda para UX suave
+
+## Estructura del proyecto
+
+```
+web/
+├── public/                # (vacío)
+├── src/
+│   ├── app/               # Rutas de la App Router (page.tsx, loading.tsx, etc.)
+│   │   ├── layout.tsx     # Layout raíz
+│   │   ├── page.tsx       # Página principal
+│   │   └── routes/        # Directorio de rutas (de autobuses)
+│   │       ├── loading.tsx# Skeleton en transiciones
+│   │       ├── page.tsx   # Página servidor: lista de rutas (de autobuses)
+│   │       ├── RoutesClient.tsx   # Componente cliente: listado
+│   │       └── [id]/
+│   │           ├── loading.tsx    # Skeleton detalle
+│   │           ├── page.tsx       # Página servidor: detalle de ruta
+│   │           └── RouteDetailClient.tsx # Componente cliente: detalle
+│   ├── components/        # Componentes UI reutilizables
+│   ├── assets/            # Imágenes importadas para Next/Image
+│   ├── lib/               # Helpers (Apollo Client, utilidades)
+│   ├── types/             # Definición de tipos TS (Route, Stop, Trip)
+│   └── styles/            # CSS global (Tailwind, globals.css)
+├── .env.local             # Variables de entorno (no versionar)
+├── next.config.js         # Configuración Next.js
+├── tsconfig.json          # Configuración TypeScript
+└── package.json           # Dependencias y scripts
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Variables de Entorno
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+En `web/.env.local` define:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```ini
+NEXT_PUBLIC_API_URL=https://<tu-dominio-api>/graphql
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=<tu-google-maps-key>
+```
 
-## Learn More
+## Instalación y ejecución local
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Desde la raíz del monorepo\ ncd web
+npm install
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- La aplicación correrá en `http://localhost:3000`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Scripts disponibles
 
-## Deploy on Vercel
+| Comando         | Descripción                           |
+| --------------- | ------------------------------------- |
+| `npm run dev`   | Inicia Next.js en modo desarrollo     |
+| `npm run build` | Genera la versión de producción       |
+| `npm run start` | Inicia servidor Next.js en producción |
+| `npm run lint`  | Ejecuta ESLint                        |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+|
+| `npm run prepare` | Genera tipos a partir de GraphQL (opcional)|
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Despliegue
+
+Puedes desplegar esta app en:
+
+- **Vercel**: Push al repositorio, configura variables en el Dashboard.
+- **DigitalOcean App Platform**: Selecciona el directorio `web`, añade env vars, y construye con `npm run build` + `npm start`.
