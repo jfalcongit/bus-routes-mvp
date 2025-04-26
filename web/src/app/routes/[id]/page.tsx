@@ -1,4 +1,3 @@
-// app/routes/[id]/page.tsx
 import { makeApolloClient } from "@/lib/apolloClient";
 import { Route as RouteType } from "@/types/routes";
 import { gql } from "@apollo/client";

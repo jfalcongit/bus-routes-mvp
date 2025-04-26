@@ -1,10 +1,14 @@
-// src/app/routes/RoutesClient.tsx
 "use client";
 
 import RouteCard from "@/components/RouteCard";
 import SearchBar from "@/components/SearchBar";
 import { Route } from "@/types/routes";
+import Fuse from "fuse.js";
 import { useMemo, useState } from "react";
+
+function stripAccents(str: string): string {
+  return str.normalize("NFD").replace(/\p{Diacritic}/gu, "");
+}
 
 interface RoutesClientProps {
   initialRoutes: Route[];
@@ -14,15 +18,29 @@ export default function RoutesClient({ initialRoutes }: RoutesClientProps) {
   const [filter, setFilter] = useState("");
 
   const routes = useMemo(() => {
-    if (!filter) return initialRoutes;
-    return initialRoutes.filter((r) => {
-      const origin = r.stops[0]?.name.toLowerCase();
-      const destination = r.stops[r.stops.length - 1]?.name.toLowerCase();
-      return (
-        origin.includes(filter.toLowerCase()) ||
-        destination.includes(filter.toLowerCase())
-      );
+    const term = stripAccents(filter.trim()).toLowerCase();
+    if (!term) return initialRoutes;
+
+    type IndexedRoute = Route & {
+      originNorm: string;
+      destinationNorm: string;
+    };
+
+    const indexed: IndexedRoute[] = initialRoutes.map((r) => ({
+      ...r,
+      originNorm: stripAccents(r.stops[0]?.name ?? "").toLowerCase(),
+      destinationNorm: stripAccents(
+        r.stops[r.stops.length - 1]?.name ?? ""
+      ).toLowerCase(),
+    }));
+
+    const fuse = new Fuse<IndexedRoute>(indexed, {
+      keys: ["originNorm", "destinationNorm"],
+      threshold: 0.3,
+      ignoreLocation: true,
     });
+
+    return fuse.search(term).map((res) => res.item);
   }, [filter, initialRoutes]);
 
   return (

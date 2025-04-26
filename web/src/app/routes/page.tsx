@@ -1,4 +1,3 @@
-import { Providers } from "@/app/providers";
 import { makeApolloClient } from "@/lib/apolloClient";
 import { gql } from "@apollo/client";
 import RoutesClient from "./RoutesClient";
@@ -27,9 +26,5 @@ export default async function RoutesPage() {
     `,
   });
 
-  return (
-    <Providers>
-      <RoutesClient initialRoutes={data.routes} />
-    </Providers>
-  );
+  return <RoutesClient initialRoutes={data.routes} />;
 }
