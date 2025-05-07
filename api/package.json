@@ -23,7 +23,9 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@googlemaps/polyline-codec": "^1.0.28",
     "@nestjs/apollo": "^13.1.0",
+    "@nestjs/axios": "^4.0.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/graphql": "^13.1.0",
@@ -34,6 +36,7 @@
     "class-validator": "^0.14.1",
     "graphql": "^16.10.0",
     "nestjs-pino": "^4.4.0",
+    "openai": "^4.96.0",
     "pino": "^9.6.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
