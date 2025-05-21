@@ -1,11 +1,12 @@
+import { join } from 'path';
 import { Module } from '@nestjs/common';
 import { LoggerModule } from 'nestjs-pino';
 import { PrismaModule } from './prisma/prisma.module';
 import { GraphQLModule } from '@nestjs/graphql';
-import { join } from 'path';
-import { RoutesModule } from './routes/routes.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { RoutesModule } from './routes/routes.module';
 import { HealthController } from './health.controller';
+import { MapsModule } from './maps/maps.module';
 
 /**
  * Módulo principal de la aplicación.
@@ -20,7 +21,7 @@ import { HealthController } from './health.controller';
      */
     LoggerModule.forRoot({
       pinoHttp: {
-        level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
+        level: 'error', //process.env.NODE_ENV === 'production' ? 'info' : 'debug',
       },
     }),
 
@@ -47,6 +48,11 @@ import { HealthController } from './health.controller';
      * Módulo que contiene la lógica de negocio para gestionar rutas de buses.
      */
     RoutesModule,
+
+    /**
+     * Módulo que contiene la lógica de negocio para generar (usando IA) rutas de buses.
+     */
+    MapsModule,
   ],
   controllers: [HealthController], // Controlador para verificar el estado de la API
   providers: [], // Servicios adicionales de nivel aplicación (ninguno actualmente)

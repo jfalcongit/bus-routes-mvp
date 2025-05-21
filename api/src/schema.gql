@@ -27,6 +27,20 @@ type Route {
   trips: [Trip!]!
 }
 
+type Stop {
+  name: String!
+  lat: Float!
+  lng: Float!
+  placeId: String!
+}
+
+input StopInput {
+  name: String!
+  lat: Float!
+  lng: Float!
+  placeId: String!
+}
+
 type Query {
   routes(page: Int! = 1, perPage: Int! = 20, origin: String, destination: String, sortBy: String, sortOrder: String): [Route!]!
   route(id: String!): Route
@@ -36,6 +50,7 @@ type Mutation {
   createRoute(data: CreateRouteInput!): Route!
   updateRoute(id: String!, data: UpdateRouteInput!): Route!
   removeRoute(id: String!): Route!
+  generateRouteStopsWithAI(origin: StopInput!, destination: StopInput!): [Stop!]!
 }
 
 input CreateRouteInput {
